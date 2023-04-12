@@ -4,8 +4,10 @@ import { FaUser } from "react-icons/fa";
 import SidebarItem from "./SidebarItem";
 import SidebarLogo from "./SidebarLogo";
 import SidebarTweetBtn from "./SidebarTweetBtn";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 const Sidebar = () => {
+  const { data: currentUser } = useCurrentUser();
   const items = [
     {
       label: "Home",
@@ -37,7 +39,9 @@ const Sidebar = () => {
             />
           ))}
 
-          <SidebarItem onClick={() => {}} icon={BiLogOut} label="Logout" />
+          {currentUser && (
+            <SidebarItem onClick={() => {}} icon={BiLogOut} label="Logout" />
+          )}
           <SidebarTweetBtn />
         </div>
       </div>
