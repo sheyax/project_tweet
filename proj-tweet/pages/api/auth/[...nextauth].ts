@@ -16,7 +16,8 @@ export default NextAuth({
             },
             async authorize(credentials){
                 if(!credentials?.email || !credentials?.password){
-                    throw new Error('invalid credentials');
+                    throw new Error('invalid credentials frontend');
+                    console.log('cannot get user from frontend')
                 }
                 
                 const user = await prisma.user.findUnique({
@@ -24,17 +25,22 @@ export default NextAuth({
                         email: credentials.email
                     }
                 });
-                if (user || !user?.hashedPassword){
-                    throw new Error('Invalid Credentials')
+
+               
+                const pass= user?.hashedPassword
+
+             
+                if (!user || !pass){
+                    throw new Error('Invalid Credentials database') 
                 }
                 
                 const isCorrectPassword= await bcrypt.compare(
                     credentials.password, 
-                    user.hashedPassword
+                    pass
                 );
                 
                 if(!isCorrectPassword){
-                    throw new Error("Invalid credentials")
+                    throw new Error("Invalid credentials password")
                 }
                 
                 return user;
